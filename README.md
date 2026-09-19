@@ -1,77 +1,29 @@
-> **새 브라우저 실험판:** [내 기기에서 무료 대화](https://mudlbum.github.io/cell-agent/chat.html) · [모바일 사용 안내](https://mudlbum.github.io/cell-agent/mobile.html). WebGPU 지원 기기에서 무료 공개 모델을 실행하며 유료 API를 호출하지 않습니다. 절전 모드와 PWA 설치 흐름을 제공하지만 모바일 실기기 검증은 아직 완료하지 않았습니다. 아래 Windows v0.3 안내는 이전 버전입니다.
-
 # CELL
 
-**작은 시작. 함께 자라는 가능성.**
+**함께 키우는 지능, 당신의 컴퓨터에서.** 전 세계의 컴퓨터가 세포처럼 협력하는 AGI를 향한 초기 실험입니다. 현재 AGI나 검증된 자기 개선 모델은 아닙니다.
 
-대화로 작업을 맡기고, 지식을 찾고 검증하는 절차를 남기며, 사용자가 선택한 경험을 서명된 패키지로 공유하는 실험적 AI 에이전트입니다.
+[홈페이지](https://mudlbum.github.io/cell-agent/) · [Windows v0.5 소스 ZIP](docs/downloads/cell-agent-v0.5.zip) · [Semi Cell](https://mudlbum.github.io/cell-agent/semi.html) · [무료 브라우저 대화](https://mudlbum.github.io/cell-agent/chat.html)
 
-[홈페이지](https://mudlbum.github.io/cell-agent/) · [설치 안내](https://mudlbum.github.io/cell-agent/install.html) · [Windows 실험판 ZIP](docs/downloads/cell-agent-v0.3.zip)
+![Cell](docs/assets/cell-organism.webp)
 
-![Cell — illustrative organism](docs/assets/cell-organism.webp)
+## API 키 없이 시작
 
-## 현재 기능
+Windows / Python 3.10 이상: `app/start-free-model.cmd`로 무료 Qwen3-0.6B 모델과 llama.cpp를 준비하고, 모델 콘솔을 켠 채 `app/control.cmd`를 실행합니다. 자료 관리에는 모델이 필요 없습니다. 유료 LLM API 호출은 차단됩니다.
 
-- 대화별 기록과 제한된 후속 문맥, 텍스트 첨부, 진행 이벤트와 명령 승인.
-- 한 작업 안에서 역할을 나누는 하위 에이전트와 호출·시간·자원 제한.
-- 출처와 탐색 방법, 검증 기준, 실패 시 대체 경로를 저장하고 사용자 근거로 평가.
-- Ed25519 서명과 SHA-256으로 선택한 절차 교환, 수신 격리, 로컬 후보 등록, 손상 패키지 재수신.
-- Windows Job Object 감독, 비상 정지, 중단 잠금, 파일 도구 변경 백업.
+- 대화: 무료 로컬 대화, Wikipedia 검색 후 출처 포함 대화. 작은 모델의 품질에는 한계가 있습니다.
+- Semi Cell: 모델 없이 모바일 메모·링크·선택한 텍스트를 저장하고 JSON으로 내보냅니다. PC에서는 격리 후 검토합니다. 실시간 동기화가 아닙니다.
+- 자율 감독: PC 실행 중 채택 자료의 절차 초안, 등록 피어 자료 확인, 등록한 공개 주제의 하루 1회 검색. 결과는 검토 전 후보입니다.
+- 공동 성장: 선택한 절차의 Ed25519 서명 공유, 수신 격리, 로컬 검증, 손상 재수신. 공개 중계 서버·자동 인터넷 기기 발견·모델 공동 학습은 아직 없습니다.
+- 언어 학습: 별도 CPU LoRA 실험 도구. 첫 후보는 약 2.3MB였으나 대화 개선 증거가 없어 배포 모델에 적용하지 않았습니다. [실험과 설계](app/LEARNING.ko.md).
 
-## 빠른 시작 — Windows
+## 통제와 플랫폼
 
-Python 3.10 이상을 준비한 뒤:
+Windows Job Object 감독과 앱 비상 정지는 Cell 작업자를 종료합니다. 별도 모델 서버와 학습 도구는 각자의 종료 수단을 사용합니다. 홈페이지에는 앱 제어용 킬스위치가 없고 영상 재생 제어만 있습니다.
 
-```powershell
-cd app
-python -X utf8 dashboard.py
-```
-
-또는 `app/control.cmd`를 실행합니다. 기본 대화 화면에서 **고정 시나리오 데모**를 선택하면 API 키 없이 런타임을 체험할 수 있습니다. 데모는 입력한 질문을 해결하는 LLM이 아닙니다.
-
-실제 작업은 GPT-6 Astra API 접근 권한과 API 키가 필요하며 비용이 발생할 수 있습니다. 키는 로컬 화면에서만 입력하세요. 이 배포에서는 실제 유료 API 호출을 테스트하지 않았습니다.
-
-선택적 피어 공유:
-
-```powershell
-python -m pip install -r requirements-network.txt
-python share_server.py
-```
-
-기본 공유 서버는 루프백 읽기 전용 피드입니다. 다른 기기의 피드에 연결하려면 HTTPS 주소와 직접 확인한 공개 키가 필요합니다. 제어 서버 8765를 외부에 노출하지 마세요.
-
-## 플랫폼 상태
-
-| 환경 | 상태 |
-|---|---|
-| Windows | Python 소스 실험판, 로컬 검증 |
-| macOS | 런타임 미지원, 별도 감독·권한 구현 필요 |
-| Android / iOS | 앱 미출시, 컴패니언 설계 단계 |
-| 웹 | 반응형 소개 및 설치 안내 |
-
-[플랫폼 확장 계획](app/PLATFORMS.ko.md)을 참고하세요. 홈페이지가 모바일에서 보인다고 모바일 실행 엔진이 구현된 것은 아닙니다.
+macOS PC 실행 엔진은 미지원입니다. Android/iOS는 Semi Cell 웹 실험판이며 실제 휴대폰 검증은 남아 있습니다. 브라우저 AI에는 WebGPU가 필요하지만 Semi 수집에는 필요하지 않습니다.
 
 ## 검증
 
-```powershell
-cd app
-python -X utf8 -m unittest test_cell_agent test_control test_workspace -q
-```
+Python 테스트 74개, 웹 테스트 14개 통과. 실제 로컬 모델 응답, Semi 격리·채택·자동 초안, Wikipedia 검색 경로 수집, 실제 CPU LoRA 16단계 학습을 확인했습니다. 품질 향상·AGI 달성을 입증한 결과는 아닙니다. [검증 기록](app/VALIDATION.md) · [설치 안내](app/README.ko.md).
 
-Windows / Python 3.10.10에서 **52개 테스트 통과**. 피어 테스트는 선택 의존성 `cryptography`가 필요합니다. 두 로컬 노드의 실제 HTTP 교환, 서명/해시 변조 거부, 버전 롤백 거부, 격리/후보 등록, 손상 복원을 포함합니다. [상세 검증 기록](app/VALIDATION.md).
-
-## 명확한 한계
-
-Cell은 새로운 LLM, AGI, 블록체인이나 자동 백신이 아닙니다. 현재의 성장은 검증된 경험과 절차의 축적·재사용이며 모델 가중치는 학습하지 않습니다. 지능 향상을 입증한 벤치마크가 없습니다. 피어의 코드를 원격 실행하지 않습니다.
-
-프로세스 감독은 적대적 코드에 대한 OS 샌드박스가 아닙니다. 승인한 명령은 현재 사용자 권한으로 실행됩니다. 비상 정지는 이미 끝난 파일 변경이나 외부 서비스 요청을 취소하지 않습니다. [운영·권한 설명](app/README.ko.md).
-
-이 저장소에는 개인 대화, 작업 상태, API 키, 서명 개인 키를 포함하지 않습니다. 서명 키는 각 설치 시 로컬에서 생성합니다.
-
-## 디렉터리
-
-- `app/`: 실행 코드, UI, 테스트와 문서
-- `docs/`: GitHub Pages 정적 홈페이지와 다운로드 파일
-- `DEPLOYMENT.ko.md`: 홈페이지 배포 및 도메인 연결
-
-메인 비주얼은 Higgsfield로 생성했습니다. 출처와 작업 ID는 [ASSETS.md](docs/ASSETS.md)에 기록했습니다. 공개 소스의 재배포·기여 라이선스 정책은 별도 LICENSE가 추가되기 전까지 확정되지 않았습니다.
+홈페이지 영상은 Higgsfield 생성 자산이며 네트워크 그림은 작동 개념을 설명합니다. 실제 전 세계 접속 현황이 아닙니다.
