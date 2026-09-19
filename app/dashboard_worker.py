@@ -51,7 +51,29 @@ def main():
             return super().response(*args, **kwargs)
 
     try:
-        if config["mode"] == "kill_test":
+        if config["mode"] == "local":
+            from local_chat import chat
+            checkpoint()
+            result = chat(payload["goal"], payload.get("context", []), timeout=min(config["seconds"],180))
+            checkpoint()
+        elif config["mode"] == "search":
+            from research import answer
+            result = answer(payload["goal"],checkpoint=checkpoint)
+        elif config["mode"] == "research":
+            from research import research_cycle
+            result = research_cycle(store,growth,config["auto_source"],checkpoint)
+        elif config["mode"] == "growth":
+            from autonomy import growth_cycle
+            result = growth_cycle(store,growth,config["auto_source"],checkpoint)
+        elif config["mode"] == "peer_sync":
+            from mesh import Mesh
+            from types import SimpleNamespace
+            checkpoint()
+            mesh = Mesh(SimpleNamespace(store=store,growth=growth))
+            if not mesh.available:raise ValueError("피어 공유 의존성을 설치하세요.")
+            result = dump(mesh.sync(config["auto_source"]))
+            checkpoint()
+        elif config["mode"] == "kill_test":
             target = str(Path(config["roots"][0]) / "heartbeat.txt")
             script = "import time,pathlib\np=pathlib.Path(" + repr(target) + ")\nfor n in range(1200):\n p.write_text(str(n))\n time.sleep(0.1)\n"
             child = subprocess.Popen([sys.executable, "-c", script], creationflags=subprocess.CREATE_NO_WINDOW)

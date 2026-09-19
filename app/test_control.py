@@ -189,6 +189,7 @@ class ControllerTests(unittest.TestCase):
                       "g.attach(p)\np.stdin.write(b'go\\n')\np.stdin.close()\nsys.stdin.readline()\n")
         owner = subprocess.Popen([sys.executable, "-c", owner_code], stdin=subprocess.PIPE,
                                  stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+                                 cwd=Path(__file__).resolve().parent,
                                  creationflags=subprocess.CREATE_NO_WINDOW)
         try:
             until(marker.exists)

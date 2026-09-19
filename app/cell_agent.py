@@ -374,22 +374,7 @@ class OpenAIProvider:
         self.key, self.model, self.effort, self.web = key, model, effort, web
 
     def response(self, instructions, inputs, previous, tools, timeout=90):
-        body = {"model": self.model, "reasoning": {"effort": self.effort},
-                "instructions": instructions, "input": inputs,
-                "tools": tools + ([{"type": "web_search"}] if self.web else []),
-                "max_output_tokens": 4000, "max_tool_calls": 5, "store": True}
-        if previous:
-            body["previous_response_id"] = previous
-        request = urllib.request.Request("https://api.openai.com/v1/responses",
-            data=dump(body).encode("utf-8"), headers={"Authorization": "Bearer " + self.key,
-            "Content-Type": "application/json"}, method="POST")
-        try:
-            with urllib.request.urlopen(request, timeout=max(1, timeout)) as response:
-                return json.load(response)
-        except urllib.error.HTTPError as error:
-            # Do not dump headers, credentials or request bodies into logs.
-            detail = error.read(8000).decode("utf-8", errors="replace")
-            raise RuntimeError(f"OpenAI HTTP {error.code}: {detail[:1200]}") from None
+        raise RuntimeError("유료 외부 LLM 호출이 비활성화되었습니다. control.cmd의 무료 로컬 대화를 사용하세요.")
 
 
 class Runtime:

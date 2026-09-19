@@ -1,3 +1,17 @@
+# v0.5 validation — 2026-09-19
+
+- Python: 74 tests passed in 30.875 seconds on Windows/Python 3.10. The process-owner crash test now sets its working directory explicitly, so discovery from the workspace root works.
+- Browser modules: 14 Node tests passed (context limits, mobile worker lifecycle, Semi schema/limits).
+- Real local browser: Semi sample saved/reloaded, export preview inspected; PC imported matching synthetic JSON, quarantined it, adopted it with evidence, and the autonomous worker produced a candidate using the real CPU model. IAB did not expose a download event, so saving/transferring a file on an actual phone is not verified.
+- Real autonomous search: registered public topic “언어 모델”, obtained three Wikipedia source links and a candidate route. Real search-then-chat displayed a local-model answer with the fetched source URLs.
+- Quality remains limited: the generated procedure used past-tense verification claims although no independent verification occurred; it remains a candidate. Search snippets are not fact-checking.
+- Real LoRA run: 16 steps, 16 synthetic training examples and six held-out examples, 573,440 trainable parameters. Held-out mean loss 2.6861319 -> 2.6176361; two generated samples unchanged; preset proxy gate failed. Candidate NOT deployed. See LEARNING.ko.md.
+- Pinned free runtime/model hashes verified. Runtime setup reuses byte-verified files while the existing model server is running, rather than trying to overwrite locked DLLs.
+- Homepage: Higgsfield 5-second 720p film (1,182,601 bytes), play/pause checked, interactive network buttons checked, no console errors. 390px viewport has 375px document width, no video source loaded automatically. Actual Android/iOS/macOS execution not tested.
+- Previous signed-peer tests still pass. No public relay/discovery deployment or federated weight training was performed. Paid LLM API was not used.
+
+Older validation below describes earlier versions and is retained as history.
+
 # v0.3 추가 검증 — 2026-09-19
 
 - 기존 42개 테스트 통과. 추가 대화/공유 10개 테스트 통과 (합계 52개).

@@ -1,0 +1,22 @@
+{"split":"train","prompt":"안녕, 무슨 일을 도와줄 수 있어?","answer":"안녕하세요. 질문에 답하고 글을 다듬거나 계획을 세우는 일을 도와드릴 수 있어요. 어떤 일을 해볼까요?"}
+{"split":"train","prompt":"이 설명은 너무 길어. 간단하게 말해 줘.","answer":"알겠습니다. 핵심만 짧게 정리하겠습니다. 줄일 내용을 보내 주세요."}
+{"split":"train","prompt":"오늘 발표 때문에 긴장돼.","answer":"중요한 발표라 긴장되시는군요. 첫 문장만 미리 연습하고, 천천히 숨을 고른 뒤 시작해 보세요."}
+{"split":"train","prompt":"그거 해 줘.","answer":"어떤 작업을 말씀하시는지 알려 주시겠어요? 대상과 원하는 결과를 알면 도와드릴 수 있어요."}
+{"split":"train","prompt":"방금 네 설명에서 '검토'는 무슨 뜻이야?","answer":"검토는 내용이 맞는지, 빠진 부분은 없는지 살펴보는 일입니다. 예를 들어 글을 제출하기 전에 오타와 근거를 확인하는 것이에요."}
+{"split":"train","prompt":"제가 앞서 알려준 이름을 말해 주세요. 여기에는 이전 대화가 없습니다.","answer":"현재 대화에는 이름이 없어 확인할 수 없습니다. 다시 알려 주시면 그 이름으로 부르겠습니다."}
+{"split":"train","prompt":"오늘 환율이 얼마야? 검색 결과는 아직 없어.","answer":"현재 환율을 확인한 자료가 없어 숫자를 단정할 수 없습니다. 통화와 기준 시점을 정한 뒤 최신 환율 출처를 조회해야 합니다."}
+{"split":"train","prompt":"'계획을 진행할 예정입니다'를 더 자연스럽게 고쳐 줘.","answer":"'계획대로 진행하겠습니다.'라고 하면 더 간결하고 자연스럽습니다."}
+{"split":"train","prompt":"친구에게 약속 시간을 바꾸자고 정중히 말하고 싶어.","answer":"미안한데, 우리 약속 시간을 조금 바꿀 수 있을까? 네가 괜찮은 시간을 알려 주면 맞춰 볼게."}
+{"split":"train","prompt":"네가 방금 실제로 파일을 지웠어?","answer":"아니요. 이 대화에서는 파일 삭제를 실행하지 않았습니다. 실제 작업 기록이 없다면 완료했다고 말할 수 없습니다."}
+{"split":"train","prompt":"내 생각이 틀릴 수도 있어. 같이 확인해 줄래?","answer":"물론입니다. 생각과 그 근거를 알려 주세요. 확인된 사실과 추측을 나누고, 다른 설명이 가능한지도 살펴보겠습니다."}
+{"split":"train","prompt":"처음 배우는 사람에게 검색 결과를 확인하는 법을 두 단계로 알려 줘.","answer":"1. 누가 언제 쓴 글인지 확인합니다.\n2. 다른 믿을 만한 출처에서도 같은 내용을 말하는지 비교합니다."}
+{"split":"train","prompt":"내가 부탁한 건 번역이 아니라 요약이었어.","answer":"제가 요청을 잘못 이해했습니다. 번역 대신 핵심 내용을 짧게 요약하겠습니다."}
+{"split":"train","prompt":"모르는 낱말을 보면 어떻게 해야 해?","answer":"문맥에서 뜻을 짐작한 뒤 사전이나 신뢰할 수 있는 출처에서 확인합니다. 뜻이 여러 개라면 지금 문장에 맞는 의미를 골라야 합니다."}
+{"split":"train","prompt":"Thank you for helping me today.","answer":"You're welcome. I'm glad I could help."}
+{"split":"train","prompt":"Can you explain that in simpler language?","answer":"Yes. Please share the part you want simplified, and I'll explain it with everyday words and an example."}
+{"split":"eval","prompt":"처음 왔어요. 반갑습니다.","answer":"반갑습니다. 어떤 도움이 필요하신가요? 편하게 말씀해 주세요."}
+{"split":"eval","prompt":"저 문장을 바꿔 줘. 어떤 문장인지는 아직 안 보냈어.","answer":"바꿀 문장을 보내 주세요. 원하는 말투도 알려 주시면 함께 반영하겠습니다."}
+{"split":"eval","prompt":"이 기기의 오늘 판매 가격을 알려 줘. 현재 가격 자료는 없어.","answer":"현재 가격 자료가 없어 정확한 금액을 말할 수 없습니다. 제품명과 판매처를 확인한 뒤 최신 가격을 조회해야 합니다."}
+{"split":"eval","prompt":"존댓말로 '내일 다시 얘기하자'를 고쳐 줘.","answer":"'내일 다시 이야기 나누면 좋겠습니다.'라고 표현할 수 있습니다."}
+{"split":"eval","prompt":"내 파일을 수정했다고 말했는데 실행 기록은 없잖아.","answer":"실행 기록이 없다면 수정했다고 말한 것은 잘못입니다. 실제로 수정했는지 확인되지 않았습니다."}
+{"split":"eval","prompt":"I need a shorter reply, please.","answer":"Of course. I'll keep it brief."}

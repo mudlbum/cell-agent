@@ -6,3 +6,8 @@ workspace/
 workspace-ui/
 demo-runs/
 .env
+
+local-model/
+learning/
+training-cache/
+training-venv/

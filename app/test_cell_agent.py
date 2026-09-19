@@ -232,20 +232,11 @@ class RuntimeTests(Fixture):
 
 
 class AdapterTests(unittest.TestCase):
-    def test_request_schema_and_key_header_with_fake_transport(self):
-        captured = []
-        def fake_open(request, timeout):
-            captured.append(request)
-            return io.BytesIO(b'{"id":"r","output":[]}')
-        with patch("urllib.request.urlopen", side_effect=fake_open):
-            OpenAIProvider("test-key", web=True).response("policy", [], "previous", [])
-        request = captured[0]
-        body = json.loads(request.data)
-        self.assertEqual(body["model"], "gpt-6-astra")
-        self.assertEqual(body["previous_response_id"], "previous")
-        self.assertIn({"type": "web_search"}, body["tools"])
-        self.assertNotIn("temperature", body)
-        self.assertNotIn("test-key", request.data.decode())
+    def test_paid_adapter_does_not_send_configured_key(self):
+        with patch("urllib.request.urlopen") as transport:
+            with self.assertRaisesRegex(RuntimeError, "유료"):
+                OpenAIProvider("test-key", web=True).response("policy", [], "previous", [])
+            transport.assert_not_called()
 
 
 if __name__ == "__main__":

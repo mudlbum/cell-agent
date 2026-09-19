@@ -21,6 +21,8 @@ from growth import Growth
 from process_guard import ProcessGuard
 from conversation import Conversations
 from mesh import Mesh
+from semi_inbox import SemiInbox
+from autonomy import Autonomy
 
 
 def prepare(store):
@@ -36,7 +38,7 @@ def prepare(store):
 
 
 class Controller:
-    def __init__(self, state, roots, lease_seconds=45):
+    def __init__(self, state, roots, lease_seconds=45, enable_autonomy=False):
         import msvcrt
         state = Path(state).resolve()
         state.mkdir(parents=True, exist_ok=True)
@@ -54,6 +56,7 @@ class Controller:
         self.body = FileBody(self.roots, self.store)
         self.conversations = Conversations(self)
         self.mesh = Mesh(self)
+        self.semi = SemiInbox(self)
         self.api_key = ""
         self.token = secrets.token_urlsafe(32)
         self.lock = threading.RLock()
@@ -70,6 +73,7 @@ class Controller:
             self._persist_latch()
         self.watch = threading.Thread(target=self._watch, daemon=True)
         self.watch.start()
+        self.autonomy = Autonomy(self,start=enable_autonomy)
 
     def _persist_latch(self):
         with self.store.lock, self.store.db:
@@ -82,9 +86,11 @@ class Controller:
             raise ValueError(f"{name}: expected integer {low}..{high}")
         return value
 
-    def start(self, data, context=None):
+    def start(self, data, context=None, background=False):
         mode = data.get("mode", "demo")
-        if mode not in {"demo", "live", "kill_test"}:
+        if mode == "live":
+            raise ValueError("현재 설정에서는 유료 외부 LLM 호출을 사용하지 않습니다. 로컬 대화 또는 데모를 선택하세요.")
+        if mode not in {"demo", "local", "search", "kill_test", "growth", "peer_sync", "research"}:
             raise ValueError("Unknown execution mode")
         goal, criteria = data.get("goal", ""), data.get("criteria", "")
         if not isinstance(goal, str) or not 1 <= len(goal.strip()) <= 12000:
@@ -107,6 +113,9 @@ class Controller:
                   "memory_mb": self._number(data, "memory_mb", 1024, 128, 8192),
                   "cpu_percent": self._number(data, "cpu_percent", 50, 10, 100),
                   "state_mb": self._number(data, "state_mb", 256, 16, 4096)}
+        if mode in {"growth","peer_sync","research"}:
+            if not background:raise ValueError("이 작업은 자율 감독 루프에서만 시작합니다.")
+            config["auto_source"]=str(data.get("auto_source",""))[:128]
         with self.lock:
             if self.closed.is_set():
                 raise ValueError("Controller is closing")
@@ -116,7 +125,7 @@ class Controller:
                 raise ValueError("이미 실행 중인 작업이 있습니다.")
             run = ident()
             # Demo workspaces are distinct from live user workspaces.
-            roots = self.roots if mode == "live" else [str(Path(self.roots[0]) / "examples" / run)]
+            roots = self.roots if mode in {"live", "local"} else [str(Path(self.roots[0]) / "examples" / run)]
             for root in roots:
                 Path(root).mkdir(parents=True, exist_ok=True)
             config["roots"] = roots
@@ -133,7 +142,7 @@ class Controller:
                     cwd=BASE, env=env, creationflags=subprocess.CREATE_NO_WINDOW)
                 # Worker waits on stdin. No task or key is delivered before successful attachment.
                 guard.attach(process)
-                self.active = {"run": run, "process": process, "guard": guard,
+                self.active = {"run": run, "process": process, "guard": guard, "background":background,
                                "deadline": time.monotonic() + config["seconds"]}
                 self.last_seen = time.monotonic()
                 with self.store.lock, self.store.db:
@@ -238,7 +247,7 @@ class Controller:
                         self.active = None
                     elif time.monotonic() >= a["deadline"]:
                         self.kill("Wall-clock deadline reached")
-                    elif self.lease_seconds and time.monotonic() - self.last_seen > self.lease_seconds:
+                    elif not a.get("background") and self.lease_seconds and time.monotonic() - self.last_seen > self.lease_seconds:
                         self.kill("Dashboard connection heartbeat lost")
             except Exception as error:
                 # A watcher failure must not silently leave work running.
@@ -300,6 +309,8 @@ class Controller:
                     routes=self.growth.find(), skills=self.store.skills(), memories=self.store.recall(""),
                     changes=changes, evaluations=evaluations, lease_seconds=self.lease_seconds,
                     conversation=self.conversations.snapshot(chat), key_configured=bool(self.api_key or os.environ.get("OPENAI_API_KEY")),
+                    autonomy=self.autonomy.snapshot() if hasattr(self,"autonomy") else {},
+                    semi_inbox=self.semi.snapshot(),
                     mesh=self.mesh.snapshot() if hasattr(self,"mesh") else {"available":False})
 
     def idle_action(self, action, data):
@@ -326,6 +337,7 @@ class Controller:
             raise ValueError("Unknown operation")
 
     def close(self):
+        if hasattr(self,"autonomy"):self.autonomy.close()
         with self.lock:
             if self.active:
                 self.kill("Controller shutting down")
@@ -418,6 +430,12 @@ class Handler(BaseHTTPRequestHandler):
                     raise ValueError("Invalid API key")
                 c.api_key = key.strip()
                 result = {"configured":bool(c.api_key)}
+            elif action == "autonomy-configure":
+                result = c.autonomy.configure(data.get("enabled"))
+            elif action == "research-topic":
+                result = c.autonomy.topic(data.get("topic"),data.get("enabled",True))
+            elif action.startswith("semi-"):
+                result = c.semi.action(action[5:],data)
             elif action.startswith("mesh-"):
                 result = c.mesh.action(action[5:],data)
             elif action == "kill":
@@ -453,10 +471,10 @@ def main():
     parser.add_argument("--root", action="append")
     parser.add_argument("--no-browser", action="store_true")
     args = parser.parse_args()
-    controller = Controller(args.state, args.root or [BASE / "workspace-ui"])
+    controller = Controller(args.state, args.root or [BASE / "workspace-ui"], enable_autonomy=True)
     server = make_server(controller, args.port)
     url = f"http://127.0.0.1:{server.server_address[1]}/#token={controller.token}"
-    print("Cell Agent Workspace 0.3\n" + url, flush=True)
+    print("Cell Agent Workspace 0.5\n" + url, flush=True)
     print("Closing this controller stops its active worker. Ctrl+C to exit.", flush=True)
     if not args.no_browser:
         webbrowser.open(url)
