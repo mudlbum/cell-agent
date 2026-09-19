@@ -1,0 +1,26 @@
+{
+  "id": "./semi.html",
+  "name": "Semi Cell — 모바일 수집함",
+  "short_name": "Semi Cell",
+  "description": "모델 없이 가볍게 수집하고 PC Cell에 전달하는 수집함",
+  "lang": "ko",
+  "start_url": "./semi.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0c0d12",
+  "theme_color": "#0c0d12",
+  "icons": [
+    {
+      "src": "assets/cell-app-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/cell-app-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

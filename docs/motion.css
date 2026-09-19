@@ -1,0 +1,22 @@
+.hero h1 em{display:inline-block;font-size:.68em;letter-spacing:-.055em}
+.hero-video{opacity:0;animation:none;transition:opacity 1.2s ease;pointer-events:none}
+.hero-video.ready{opacity:.95}
+.motion-toggle{position:absolute;right:6%;bottom:58px;z-index:2;padding:10px 15px;border:1px solid #d8f99b50;border-radius:30px;background:#0b0c0fbb;color:#d8f99b;font-size:11px;backdrop-filter:blur(12px)}
+.network-art{min-height:570px;padding-bottom:80px}
+.network-art svg{pointer-events:none}
+.network-art svg path{stroke-dasharray:7 12;animation:signal 18s linear infinite;animation-play-state:paused}
+.network-art.in-view svg path{animation-play-state:running}
+.network-core{box-shadow:0 0 75px #c4ace322,inset 0 0 35px #c4ace311;animation:cell-breathe 7s ease-in-out infinite;animation-play-state:paused}
+.network-art.in-view .network-core{animation-play-state:running}
+.satellite{font-family:inherit;color:#ddd4ee;z-index:2;transition:background .3s,box-shadow .3s,border-color .3s;animation:none!important}
+.satellite:hover,.satellite[aria-pressed="true"]{background:#d8f99b20;border-color:#d8f99b;box-shadow:0 0 35px #d8f99b25;color:#e6ffbe}
+.network-caption{position:absolute;bottom:0;left:5%;right:5%;text-align:center;z-index:2}
+.network-caption>span{font-size:9px;letter-spacing:1px;color:#92939f}
+.network-caption p{min-height:48px;font-size:12px;line-height:1.8;color:#d1d4c9}
+.benefits article,.platform{transition:border-color .3s,background .3s,transform .3s}
+.benefits article:hover,.platform:hover{border-color:#c6afd95c;background:#c6afd909;transform:translateY(-4px)}
+.motion-paused *{animation-play-state:paused!important}
+@keyframes signal{to{stroke-dashoffset:-380}}
+@keyframes cell-breathe{50%{box-shadow:0 0 100px #c4ace344,inset 0 0 45px #d8f99b22;border-radius:44% 56% 53% 47%}}
+@media(max-width:700px){.hero h1{font-size:clamp(43px,12.5vw,70px)}.hero h1 em{font-size:.65em}.hero-video.ready{opacity:.65}.network-art{min-height:420px;height:420px;padding-bottom:65px}.network-caption{left:0;right:0}.network-caption p{font-size:11px}.motion-toggle{bottom:48px;font-size:10px}.hero-copy{overflow-wrap:anywhere}}
+@media(prefers-reduced-motion:reduce){.hero-video{transition:none}.network-art *{animation:none!important}.benefits article:hover,.platform:hover{transform:none}}

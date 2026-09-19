@@ -1,6 +1,6 @@
 // Only public app shell files; never cache chat text or proxy model requests here.
-const CACHE='cell-shell-mobile-v1';
-const FILES=['chat.html','chat-web.js','chat-core.mjs','chat-web.css','inference-worker.js','cell.webmanifest','mobile.html','assets/cell-mark.svg','assets/cell-app-192.png','assets/cell-app-512.png'];
+const CACHE='cell-shell-mobile-v2';
+const FILES=['semi.html','semi.js','semi-core.mjs','semi.css','semi.webmanifest','chat.html','chat-web.js','chat-core.mjs','chat-web.css','inference-worker.js','cell.webmanifest','mobile.html','assets/cell-mark.svg','assets/cell-app-192.png','assets/cell-app-512.png'];
 const urls=FILES.map(p=>new URL(p,self.registration.scope).href);
 self.addEventListener('install',e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll(urls))));
 self.addEventListener('activate',e=>e.waitUntil((async()=>{for(const k of await caches.keys())if(k.startsWith('cell-shell-')&&k!==CACHE)await caches.delete(k);await self.clients.claim();})()));
