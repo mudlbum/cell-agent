@@ -1,0 +1,26 @@
+{
+  "id": "./chat.html",
+  "name": "Cell — 내 기기의 무료 AI",
+  "short_name": "Cell",
+  "description": "내 기기에서 실행하는 무료 공개 모델 대화 실험판",
+  "lang": "ko",
+  "start_url": "./chat.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0c0d12",
+  "theme_color": "#0c0d12",
+  "icons": [
+    {
+      "src": "assets/cell-app-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/cell-app-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
