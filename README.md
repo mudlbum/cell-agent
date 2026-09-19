@@ -1,3 +1,5 @@
+> **새 브라우저 실험판:** [내 기기에서 무료 대화](https://mudlbum.github.io/cell-agent/chat.html) · [모바일 사용 안내](https://mudlbum.github.io/cell-agent/mobile.html). WebGPU 지원 기기에서 무료 공개 모델을 실행하며 유료 API를 호출하지 않습니다. 절전 모드와 PWA 설치 흐름을 제공하지만 모바일 실기기 검증은 아직 완료하지 않았습니다. 아래 Windows v0.3 안내는 이전 버전입니다.
+
 # CELL
 
 **작은 시작. 함께 자라는 가능성.**
