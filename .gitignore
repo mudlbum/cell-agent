@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+state/
+state-ui/
+workspace/
+workspace-ui/
+demo-runs/
+.env
+*.key
+*.sqlite*
+*.db
+work/
